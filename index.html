@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gatos Aleatórios</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+        }
+        #cat-container {
+            text-align: center;
+        }
+        img {
+            max-width: 100%;
+            height: auto;
+            border: 3px solid #e75cad;
+            border-radius: 40px;
+            margin-bottom: 50px;
+        }
+        .error {
+            color: red;
+            font-size: 1.5em;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="cat-container">
+        <img id="cat-image" alt="Imagem de gato" style="display:none;">
+        <p id="error-message" class="error" style="display:none;"></p>
+    </div>
+
+    <script>
+        function loadCat() {
+            const img = document.getElementById('cat-image');
+            const errorMsg = document.getElementById('error-message');
+            
+            img.style.display = 'none'; // Ocultar a imagem anterior
+            errorMsg.style.display = 'none'; // Ocultar mensagem de erro
+            
+            fetch('https://cataas.com/cat')
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Erro ao carregar a imagem');
+                    }
+                    return response.blob();
+                })
+                .then(blob => {
+                    const imgUrl = URL.createObjectURL(blob);
+                    img.src = imgUrl;
+                    img.style.display = 'block'; // Mostrar a nova imagem
+                })
+                .catch(error => {
+                    errorMsg.textContent = 'Ops! Não foi possível carregar a imagem. Tente novamente mais tarde.';
+                    errorMsg.style.display = 'block'; // Mostrar a mensagem de erro
+                });
+        }
+
+        // Carrega um gato quando a página for carregada
+        window.onload = loadCat;
+    </script>
+
+</body>
+</html>
